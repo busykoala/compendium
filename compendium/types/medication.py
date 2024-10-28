@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Medication:
+    name: str = ""
     composition: str = ""
     dosage_form: str = ""
     indications: str = ""

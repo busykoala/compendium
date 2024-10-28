@@ -13,11 +13,23 @@ def get_documents(medications: list[Medication]):
     return [
         Document(
             page_content=(
-                f"{med.composition} {med.dosage_form} {med.indications} {med.dosage} "
-                f"{med.contraindications} {med.warnings_and_precautions} {med.interactions} "
-                f"{med.pregnancy_lactation_period} {med.effects_on_the_ability_to_drive_and_operate_machinery} "
-                f"{med.undesirable_effects} {med.overdose} {med.properties_effects} "
-                f"{med.pharmacokinetics} {med.preclinical_data} {med.other_information}"),
+                f"Name: {med.name}\n"
+                f"Zusammensetzung: {med.composition}\n"
+                f"Wirkstoffmenge pro Einheit: {med.dosage_form}\n"
+                f"Indikationen/Anwendungsmöglichkeiten: {med.indications}\n"
+                f"Dosierung/Anwendung: {med.dosage}\n"
+                f"Kontraindikationen: {med.contraindications}\n"
+                f"Warnhinweise und Vorsichtsmassnahmen: {med.warnings_and_precautions}\n"
+                f"Interaktionen: {med.interactions}\n"
+                f"Schwangerschaft/Stillzeit: {med.pregnancy_lactation_period}\n"
+                f"Wirkung auf die Fahrtüchtigkeit und auf das Bedienen von Maschinen: {med.effects_on_the_ability_to_drive_and_operate_machinery}\n"
+                f"Unerwünschte Wirkungen: {med.undesirable_effects}\n"
+                f"Überdosierung: {med.overdose}\n"
+                f"Eigenschaften/Wirkungen: {med.properties_effects}\n"
+                f"Pharmakokinetik: {med.pharmacokinetics}\n"
+                f"Präklinische Daten: {med.preclinical_data}\n"
+                f"Sonstige Hinweise: {med.other_information}"
+            ),
             metadata={"id": idx}
         )
         for idx, med in enumerate(medications)

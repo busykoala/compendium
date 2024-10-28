@@ -5,6 +5,7 @@ from typing import List
 
 file_path = Path("data/compendium.txt")
 section_markers = {
+    "name": ("Fachinformation", "Zusammensetzung"),
     "composition": ("Zusammensetzung", "Wirkstoffmenge pro Einheit"),
     "dosage_form": ("Wirkstoffmenge pro Einheit", "Indikationen/Anwendungsmöglichkeiten"),
     "indications": ("Indikationen/Anwendungsmöglichkeiten", "Dosierung/Anwendung"),
