@@ -15,7 +15,7 @@ poetry install
 3. Run the following command:
 
 ```bash
-poetry run python run.py
+poetry run uvicorn main:app --reload
 ```
 
 To configure the models for the embeddings or chat, edit the config
