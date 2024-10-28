@@ -7,10 +7,10 @@ from langchain.schema import Document
 from compendium.types.medication import Medication
 from time import sleep
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 filename = "output/medication_embeddings.pkl"
 
-embeddings = OpenAIEmbeddings(model="text-embedding-3-large", openai_api_key=OPENAI_API_KEY)
+# loads the key from the environment variable OPENAI_API_KEY
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 
 def create_store_embeddings(medications: list[Medication], batch_size: int = 10):
     documents = [
