@@ -1,19 +1,16 @@
-import os
-import pickle
-from pathlib import Path
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.schema import Document
+from compendium.config import Config
 from compendium.types.medication import Medication
+from langchain.schema import Document
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+from pathlib import Path
 from time import sleep
 
-filename = "output/medication_embeddings.pkl"
+config = Config()
+embeddings = OpenAIEmbeddings(model=config.embeddings_model)
 
-# loads the key from the environment variable OPENAI_API_KEY
-embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
-
-def create_store_embeddings(medications: list[Medication], batch_size: int = 10):
-    documents = [
+def get_documents(medications: list[Medication]):
+    return [
         Document(
             page_content=(
                 f"{med.composition} {med.dosage_form} {med.indications} {med.dosage} "
@@ -26,6 +23,9 @@ def create_store_embeddings(medications: list[Medication], batch_size: int = 10)
         for idx, med in enumerate(medications)
     ]
 
+def create_store_embeddings(medications: list[Medication], batch_size: int = 10):
+    documents = get_documents(medications)
+
     # Process in batches
     vector_store = None
     for i in range(0, len(documents), batch_size):
@@ -37,17 +37,18 @@ def create_store_embeddings(medications: list[Medication], batch_size: int = 10)
         else:
             vector_store.merge_from(batch_store)
         print(f"Processed {i + len(batch)} of {len(documents)} documents")
-        print(f"Waiting for 5 seconds...")
         sleep(5)
-
-    with open(filename, "wb") as f:
-        pickle.dump((vector_store, documents), f)
-
+        break
+    vector_store.save_local(config.vectorstore_dir)
 
 
 def load_embeddings(medications: list[Medication]):
-    if not Path(filename).exists():
+    if not Path(config.vectorstore_dir).exists():
+        print("No embeddings found, creating new embeddings")
         create_store_embeddings(medications)
-    with open(filename, "rb") as f:
-        vector_store, documents = pickle.load(f)
-    return vector_store, documents
+    print("Loading embeddings")
+    vector_store = FAISS.load_local(
+        config.vectorstore_dir,
+        OpenAIEmbeddings(),
+        allow_dangerous_deserialization=True)
+    return vector_store

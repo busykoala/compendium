@@ -1,6 +1,6 @@
+from compendium.types.medication import Medication
 from pathlib import Path
 from typing import List
-from compendium.types.medication import Medication
 
 
 file_path = Path("data/compendium.txt")
