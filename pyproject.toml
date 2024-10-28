@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "compendium"
+version = "0.1.0"
+description = ""
+authors = ["Matthias Osswald <info@busykoala.io>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain = "^0.3.4"
+faiss-cpu = "^1.9.0"
+langchain-community = "^0.3.3"
+tiktoken = "^0.8.0"
+langchain-openai = "^0.2.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
