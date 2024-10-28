@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medication Suggestion</title>
+</head>
+<body>
+    <h2>Medication Suggestion</h2>
+    <form action="/suggest" method="post">
+        <label for="symptoms">Enter Symptoms:</label>
+        <input type="text" id="symptoms" name="symptoms" required>
+        <button type="submit">Suggest Medication</button>
+    </form>
+
+    {% if result %}
+        <h3>Suggested Medication:</h3>
+        <p>{{ result }}</p>
+    {% endif %}
+</body>
+</html>
