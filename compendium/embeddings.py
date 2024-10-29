@@ -3,8 +3,10 @@ from compendium.types.medication import Medication
 from langchain.schema import Document
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
+from openai import RateLimitError
 from pathlib import Path
 from time import sleep
+from compendium import logger
 
 config = Config()
 embeddings = OpenAIEmbeddings(model=config.embeddings_model)
@@ -42,23 +44,27 @@ def create_store_embeddings(medications: list[Medication], batch_size: int = 10)
     vector_store = None
     for i in range(0, len(documents), batch_size):
         batch = documents[i:i + batch_size]
-        batch_store = FAISS.from_documents(batch, embeddings)
+        try:
+            batch_store = FAISS.from_documents(batch, embeddings)
+        except RateLimitError as e:
+            logger.error(f"Rate limit exceeded: {e}")
+            exit(1)
         # Combine or save each batch as needed
         if vector_store is None:
             vector_store = batch_store
         else:
             vector_store.merge_from(batch_store)
-        print(f"Processed {i + len(batch)} of {len(documents)} documents")
+        logger.info(f"Processed {i + len(batch)} of {len(documents)} documents")
         sleep(5)
         break
     vector_store.save_local(config.vectorstore_dir)
 
 
-def load_embeddings(medications: list[Medication]):
+def load_embeddings() -> FAISS:
     if not Path(config.vectorstore_dir).exists():
-        print("No embeddings found, creating new embeddings")
-        create_store_embeddings(medications)
-    print("Loading embeddings")
+        logger.error("No embeddings found, stopping")
+        exit(1)
+    logger.info("Loading embeddings")
     vector_store = FAISS.load_local(
         config.vectorstore_dir,
         OpenAIEmbeddings(),

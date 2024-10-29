@@ -8,10 +8,7 @@ from fastapi.templating import Jinja2Templates
 
 medications = get_medications()
 documents = get_documents(medications)
-vectorstore = load_embeddings(medications)
-
-def mock_suggest_medication(symptoms):
-    return f"Mocked suggestion for symptoms: {symptoms}"
+vectorstore = load_embeddings()
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")

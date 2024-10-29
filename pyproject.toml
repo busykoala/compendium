@@ -16,6 +16,7 @@ fastapi = "^0.115.4"
 uvicorn = "^0.32.0"
 jinja2 = "^3.1.4"
 python-multipart = "^0.0.16"
+python-json-logger = "^2.0.7"
 
 
 [build-system]
