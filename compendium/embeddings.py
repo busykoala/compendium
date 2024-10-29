@@ -56,7 +56,6 @@ def create_store_embeddings(medications: list[Medication], batch_size: int = 10)
             vector_store.merge_from(batch_store)
         logger.info(f"Processed {i + len(batch)} of {len(documents)} documents")
         sleep(5)
-        break
     vector_store.save_local(config.vectorstore_dir)
 
 
