@@ -3,19 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medication Suggestion</title>
+    <title>Medikationsvorschlag</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 1rem;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 0.25rem;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #e9f5e9;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+        }
+        .result h3 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <h2>Medication Suggestion</h2>
-    <form action="/suggest" method="post">
-        <label for="symptoms">Enter Symptoms:</label>
-        <input type="text" id="symptoms" name="symptoms" required>
-        <button type="submit">Suggest Medication</button>
-    </form>
+    <div class="container">
+        <h2>Medikationsvorschlag</h2>
+        <form action="/suggest" method="post">
+            <label for="symptoms">Symptome:</label>
+            <input type="text" id="symptoms" name="symptoms" required>
 
-    {% if result %}
-        <h3>Suggested Medication:</h3>
-        <p>{{ result }}</p>
-    {% endif %}
+            <label for="age">Alter:</label>
+            <input type="number" id="age" name="age" min="0" required>
+
+            <label for="sex">Geschlecht:</label>
+            <select id="sex" name="sex" required>
+                <option value="">Bitte wählen</option>
+                <option value="male">Männlich</option>
+                <option value="female">Weiblich</option>
+                <option value="other">Andere</option>
+            </select>
+
+            <button type="submit">Medikation vorschlagen</button>
+        </form>
+
+        {% if result %}
+            <div class="result">
+                <h3>Resultat:</h3>
+                <p>{{ result.replace('\n', '<br>') | safe }}</p>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>

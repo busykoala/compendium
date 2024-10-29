@@ -18,9 +18,11 @@ async def get_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/suggest", response_class=HTMLResponse)
-async def suggest(request: Request, symptoms: str = Form(...)):
+async def suggest(request: Request, symptoms: str = Form(...), age: int = Form(...), sex: str = Form(...)):
     result = suggest_medication(
         symptoms,
         vectorstore,
-        documents)
+        age=age,
+        sex=sex,
+    )
     return templates.TemplateResponse("index.html", {"request": request, "result": result})
