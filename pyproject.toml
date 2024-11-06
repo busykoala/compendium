@@ -19,7 +19,19 @@ python-multipart = "^0.0.16"
 python-json-logger = "^2.0.7"
 itsdangerous = "^2.2.0"
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.7.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "Q", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+force-single-line = true

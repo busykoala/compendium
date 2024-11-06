@@ -31,6 +31,13 @@ poetry run uvicorn main:app --reload
 To configure the models for the embeddings or chat, edit the config
 in `./compendium/config.py`.
 
+## Format and Lint
+
+```bash
+poetry run ruff format
+poetry run ruff check --fix
+```
+
 ## Docker
 
 ```

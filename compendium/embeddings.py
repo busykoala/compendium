@@ -1,15 +1,18 @@
-from compendium.config import Config
-from compendium.types.medication import Medication
+from pathlib import Path
+from time import sleep
+
 from langchain.schema import Document
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from openai import RateLimitError
-from pathlib import Path
-from time import sleep
+
 from compendium import logger
+from compendium.config import Config
+from compendium.types.medication import Medication
 
 config = Config()
 embeddings = OpenAIEmbeddings(model=config.embeddings_model)
+
 
 def get_documents(medications: list[Medication]):
     return [
@@ -32,18 +35,21 @@ def get_documents(medications: list[Medication]):
                 f"Präklinische Daten: {med.preclinical_data}\n"
                 f"Sonstige Hinweise: {med.other_information}"
             ),
-            metadata={"id": idx}
+            metadata={"id": idx},
         )
         for idx, med in enumerate(medications)
     ]
 
-def create_store_embeddings(medications: list[Medication], batch_size: int = 10):
+
+def create_store_embeddings(
+    medications: list[Medication], batch_size: int = 10
+):
     documents = get_documents(medications)
 
     # Process in batches
     vector_store = None
     for i in range(0, len(documents), batch_size):
-        batch = documents[i:i + batch_size]
+        batch = documents[i : i + batch_size]
         try:
             batch_store = FAISS.from_documents(batch, embeddings)
         except RateLimitError as e:
@@ -54,7 +60,9 @@ def create_store_embeddings(medications: list[Medication], batch_size: int = 10)
             vector_store = batch_store
         else:
             vector_store.merge_from(batch_store)
-        logger.info(f"Processed {i + len(batch)} of {len(documents)} documents")
+        logger.info(
+            f"Processed {i + len(batch)} of {len(documents)} documents"
+        )
         sleep(5)
     vector_store.save_local(config.vectorstore_dir)
 
@@ -67,5 +75,6 @@ def load_embeddings() -> FAISS:
     vector_store = FAISS.load_local(
         config.vectorstore_dir,
         OpenAIEmbeddings(),
-        allow_dangerous_deserialization=True)
+        allow_dangerous_deserialization=True,
+    )
     return vector_store

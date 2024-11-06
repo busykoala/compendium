@@ -1,16 +1,19 @@
-from compendium.config import Config
-from compendium.split_from_all import get_medications
-from compendium.types.medication import Medication
 from langchain.schema import HumanMessage
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai.chat_models import ChatOpenAI
 
+from compendium.config import Config
+from compendium.split_from_all import get_medications
+from compendium.types.medication import Medication
+
 config = Config()
 embeddings = OpenAIEmbeddings(model=config.embeddings_model)
 
+
 def suggest_medication(query, vector_store, age, sex):
     query_embedding = embeddings.embed_query(
-        f"{query} (Alter: {age}, Geschlecht: {sex})")
+        f"{query} (Alter: {age}, Geschlecht: {sex})"
+    )
     results = vector_store.similarity_search_by_vector(query_embedding, k=20)
     medications = get_medications()
 

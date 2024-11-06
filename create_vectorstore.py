@@ -1,7 +1,7 @@
-from compendium.embeddings import get_documents
-from compendium.embeddings import create_store_embeddings
-from compendium.split_from_all import get_medications
 from compendium import logger
+from compendium.embeddings import create_store_embeddings
+from compendium.embeddings import get_documents
+from compendium.split_from_all import get_medications
 
 logger.info("Loading and parsing medications...")
 medications = get_medications()

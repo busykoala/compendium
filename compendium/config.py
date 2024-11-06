@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Config:
     embeddings_model: str = "text-embedding-3-large"
